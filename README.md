@@ -37,7 +37,7 @@ cd ~/my-project
 mise run pi
 ```
 
-Your current directory is mounted at `/workspace` inside the container. Pi's config, sessions, and credentials are mounted from `~/.pi/agent`. Files written by the agent are owned by your user on the host.
+Your current directory is mounted at its real path inside the container (e.g. `/home/you/my-project`). Pi uses this path for session tracking, so each project gets its own session history. Pi's config, sessions, and credentials are mounted from `~/.pi/agent`. Files written by the agent are owned by your user on the host.
 
 ### Alias (optional)
 
@@ -111,8 +111,10 @@ The container is launched with:
 - `--user $(id -u):$(id -g)` — files created inside the container are owned by your host user
 - `--cap-drop=ALL` — all Linux capabilities dropped
 - `--security-opt=no-new-privileges` — prevents privilege escalation via setuid binaries
-- `--volume $(pwd):/workspace` — only your current directory is accessible
+- `--volume $(pwd):$(pwd)` — your current directory is mounted at its real host path; the container's working directory is set to match
 - `--volume ~/.pi/agent:/pi-agent` — pi config, credentials, and sessions
+
+Mounting the directory at its real path (rather than a fixed `/workspace`) means pi's session tracking reflects the actual project path, so each project gets distinct session history.
 
 The agent cannot reach other directories on your host. It can make arbitrary network requests and execute any command available inside the container image.
 

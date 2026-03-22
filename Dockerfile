@@ -26,14 +26,9 @@ RUN curl -fsSL https://mise.run \
 # prevents other UIDs from deleting each other's files.
 RUN mkdir -p /home/piuser && chmod 1777 /home/piuser
 
-# Create the workspace mountpoint
-RUN mkdir -p /workspace
-
 # Point HOME at the shared dir above. pi's own config path is overridden at
 # runtime via PI_CODING_AGENT_DIR, so this HOME is only a fallback for any
 # other tooling that needs a writable home (e.g. git credential helpers).
 ENV HOME=/home/piuser
-
-WORKDIR /workspace
 
 ENTRYPOINT ["pi"]
