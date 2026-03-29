@@ -1,5 +1,5 @@
-# Common setup for pi Docker tasks. Source this file; do not execute directly.
-# Usage: source "$(dirname "$0")/_common"
+# Builds DOCKER_FLAGS for pi container tasks. Source this file; do not execute directly.
+# Usage: source "$(dirname "$0")/_docker_flags"
 
 PI_IMAGE="pi-less-yolo:latest"
 
@@ -20,7 +20,6 @@ docker image inspect "${PI_IMAGE}" > /dev/null 2>&1 || mise run pi:build
 #                               issues inside the container.
 DOCKER_FLAGS=(
   "--rm"
-  "--interactive"
   "--user" "$(id -u):$(id -g)"
   "--cap-drop=ALL"
   "--security-opt=no-new-privileges"
@@ -60,8 +59,6 @@ PI_ENV_VARS=(
 for var in "${PI_ENV_VARS[@]}"; do
   [ -n "${!var:-}" ] && DOCKER_FLAGS+=("--env" "$var=${!var}")
 done
-
-[ -t 0 ] && [ -t 1 ] && DOCKER_FLAGS+=("--tty")
 
 # Git identity: mount ~/.gitconfig read-only. Opt out with PI_NO_GITCONFIG=1.
 # Credential helpers (e.g. osxkeychain) are unavailable; git falls back to prompting.
