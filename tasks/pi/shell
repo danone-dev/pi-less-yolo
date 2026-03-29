@@ -7,4 +7,5 @@ set -euo pipefail
 # shellcheck source=tasks/pi/_common
 source "$(dirname "$0")/_common"
 
-docker run --entrypoint bash "${DOCKER_FLAGS[@]}" "${PI_IMAGE}"
+# Pass bash as CMD so the entrypoint runs passwd synthesis before dropping to a shell.
+docker run "${DOCKER_FLAGS[@]}" "${PI_IMAGE}" bash
