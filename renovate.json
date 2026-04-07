@@ -1,18 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "docker": { "enabled": false },
   "github-actions": { "enabled": false },
   "minimumReleaseAge": "3 days",
   "packageRules": [
     {
-      "depNames": ["@mariozechner/pi-coding-agent"],
-      "minimumReleaseAge": "0 days"
+      "matchCategories": ["docker"],
+      "enabled": false
+    },
+    {
+      "matchDepNames": ["@mariozechner/pi-coding-agent"],
+      "minimumReleaseAge": null
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^Dockerfile$"],
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
       "matchStrings": [
         "MISE_VERSION=(?<currentValue>[\\d.]+)"
       ],
@@ -21,7 +25,8 @@
       "packageNameTemplate": "jdx/mise"
     },
     {
-      "fileMatch": ["^Dockerfile$"],
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
       "matchStrings": [
         "mise (?:install|exec) uv@(?<currentValue>[\\d.]+)"
       ],
@@ -30,7 +35,8 @@
       "packageNameTemplate": "astral-sh/uv"
     },
     {
-      "fileMatch": ["^Dockerfile$"],
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
       "matchStrings": [
         "uv python install (?<currentValue>[\\d.]+)"
       ],
@@ -40,7 +46,8 @@
       "extractVersionTemplate": "^v(?<version>.*)$"
     },
     {
-      "fileMatch": ["^Dockerfile$", "^README\\.md$"],
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/", "/^README\\.md$/"],
       "matchStrings": [
         "pi-coding-agent@(?<currentValue>[\\d.]+)",
         "pi--coding--agent-(?<currentValue>[\\d.]+)-blueviolet"
